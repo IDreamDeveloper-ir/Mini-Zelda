@@ -27,15 +27,23 @@ public class PickHandler : MonoBehaviour, IInteractable
     {
         if(GetComponent<Rigidbody>() == null)
         {
-            this.AddComponent<Rigidbody>();
+            this.AddComponent<Rigidbody>().freezeRotation = true;
         }
         if (GetComponent<MeshCollider>() == null)
         {
             this.AddComponent<MeshCollider>().convex = true;
         }
+        if (GetComponent<BoxCollider>() == null)
+        {
+            this.AddComponent<BoxCollider>().size = Vector3.one * 1.2f;
+            GetComponent<BoxCollider>().isTrigger = true;
+        }
+
         GetComponent<Rigidbody>().AddForce(transform.parent.forward * 50);
 
         transform.parent = null;
+
+        InteractionManager.Instance.PickedObj = null;
     }
 
     void OnPickUP(Transform t)
@@ -47,6 +55,10 @@ public class PickHandler : MonoBehaviour, IInteractable
         if (GetComponent<MeshCollider>() != null)
         {
             Destroy(GetComponent<MeshCollider>());
+        }
+        if (GetComponent<BoxCollider>() != null)
+        {
+            Destroy(GetComponent<BoxCollider>());
         }
 
         transform.parent = t;
@@ -75,6 +87,7 @@ public class PickHandler : MonoBehaviour, IInteractable
             {
                 InteractionManager.Instance.PickedObj = null;
             }
+            Debug.Log(name);
         }
     }
 }
