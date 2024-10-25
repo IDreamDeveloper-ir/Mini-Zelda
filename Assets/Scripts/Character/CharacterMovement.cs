@@ -9,7 +9,8 @@ public class CharacterMovement : MonoBehaviour
     private const string animParamiterJump = "Jump";
     private const string animParamiterLoss = "IsDead";
 
-    [SerializeField][Range(0, 10)] private float playerSpeed;
+    [SerializeField][Range(0, 10)] private float playerWalkSpeed;
+    [SerializeField][Range(0, 10)] private float playerSprintSpeed;
     [SerializeField][Range(0, 10)] private float playerJump;
     [SerializeField] private LayerMask GroundLayerMask;
 
@@ -45,13 +46,14 @@ public class CharacterMovement : MonoBehaviour
     private void movement(Vector2 direction)
     {
         _rigidbody.velocity = ((Vector3.right * direction.x)
-            + (Vector3.forward * direction.y)) * playerSpeed
+            + (Vector3.forward * direction.y)) 
+            * (_Sprint ? playerSprintSpeed : playerWalkSpeed)
             + (Vector3.up * _rigidbody.velocity.y);
 
         if (direction != Vector2.zero)
         {
             CharacterRotationList.TryGetValue(
-                direction,
+                AdvancedNormalized(direction),
                 out _characterRotation);
             transform.GetChild(0).eulerAngles = _characterRotation * Vector3.up;
         }
@@ -73,9 +75,9 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         _movmentAxis = Vector2.zero;
-        _OnGround = Physics.Raycast(transform.position + (Vector3.down * 0.5f), Vector3.down,1f,GroundLayerMask);
+        _OnGround = Physics.Raycast(transform.position, Vector3.down,.5f,GroundLayerMask);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _OnGround)
         {
             Jump();
         }
@@ -99,7 +101,7 @@ public class CharacterMovement : MonoBehaviour
         _movmentAxis.x = Input.GetAxis("Horizontal");
         _movmentAxis.y = Input.GetAxis("Vertical");
 
-        _movmentAxis = AdvancedNormalized(_movmentAxis.normalized);
+        _movmentAxis = _movmentAxis.normalized;
 
         movement(_movmentAxis);
     }

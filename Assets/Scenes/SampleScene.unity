@@ -3348,8 +3348,8 @@ GameObject:
   m_Component:
   - component: {fileID: 870172901}
   - component: {fileID: 870172902}
-  - component: {fileID: 870172904}
   - component: {fileID: 870172903}
+  - component: {fileID: 870172904}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -3407,8 +3407,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c306d1b5830e6d4bac21036e69414e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorConditions:
-  - {fileID: 921561028}
 --- !u!65 &870172904
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3429,7 +3427,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &921561028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3445,7 +3443,6 @@ GameObject:
   - component: {fileID: 921561029}
   - component: {fileID: 921561034}
   - component: {fileID: 921561035}
-  - component: {fileID: 921561036}
   m_Layer: 0
   m_Name: PressurePlate
   m_TagString: Untagged
@@ -3465,6 +3462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df1e619ca0e903b48806821a7eb1f469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Door: {fileID: 870172903}
 --- !u!95 &921561030
 Animator:
   serializedVersion: 5
@@ -3595,18 +3593,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &921561036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921561028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 981b9571b66e6364cb020f7559a31f78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &934220507
 GameObject:
   m_ObjectHideFlags: 0
@@ -4518,7 +4504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf17b4c926a686b48877ad43508dedb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 5
+  playerWalkSpeed: 3
+  playerSprintSpeed: 5
   playerJump: 5
   GroundLayerMask:
     serializedVersion: 2
