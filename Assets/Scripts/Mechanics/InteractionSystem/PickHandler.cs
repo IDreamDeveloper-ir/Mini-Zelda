@@ -3,9 +3,27 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PickHandler : MonoBehaviour,IPickable
+public class PickHandler : MonoBehaviour, IInteractable
 {
-    void IPickable.OnPickDown()
+    private bool _hasPickedUP = false;
+    void IInteractable.OnInteract()
+    {
+        if((Object)InteractionManager.Instance.PickedObj == this)
+        {
+            if (_hasPickedUP)
+            {
+                _hasPickedUP = false;
+                OnPickDown();
+            }
+            else
+            {
+                _hasPickedUP = true;
+                OnPickUP(InteractionManager.Instance.HoldLocation);
+            }
+        }
+    }
+
+    void OnPickDown()
     {
         if(GetComponent<Rigidbody>() == null)
         {
@@ -20,7 +38,7 @@ public class PickHandler : MonoBehaviour,IPickable
         transform.parent = null;
     }
 
-    void IPickable.OnPickUP(Transform t)
+    void OnPickUP(Transform t)
     {
         if (GetComponent<Rigidbody>() != null)
         {
@@ -40,7 +58,11 @@ public class PickHandler : MonoBehaviour,IPickable
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<InteractionManager>().SetObjectToPick(this);
+            if (InteractionManager.Instance.PickedObj == null)
+            {
+                other.GetComponent<InteractionManager>().SetObjectToInteract(this);
+                InteractionManager.Instance.PickedObj = this;
+            }
         }
     }
 
@@ -49,6 +71,10 @@ public class PickHandler : MonoBehaviour,IPickable
         if (other.CompareTag("Player"))
         {
             other.GetComponent<InteractionManager>().ClearMe(this);
+            if ((Object)InteractionManager.Instance.PickedObj == this)
+            {
+                InteractionManager.Instance.PickedObj = null;
+            }
         }
     }
 }

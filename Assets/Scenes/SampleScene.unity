@@ -4004,7 +4004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b897a78e9d9cfb4298a3b7f4a5f7660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickUPLocation: {fileID: 776403140}
+  HoldLocation: {fileID: 776403140}
 --- !u!1001 &1263103760
 PrefabInstance:
   m_ObjectHideFlags: 0

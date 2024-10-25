@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPickable
+public interface IInteractable
 {
-    void OnPickUP(Transform t);
-    void OnPickDown();
+    void OnInteract();
 }

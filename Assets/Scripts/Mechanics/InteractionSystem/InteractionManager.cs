@@ -1,39 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
-    [SerializeField] private Transform PickUPLocation;
+    public static InteractionManager Instance;
+    public Transform HoldLocation;
+    [NonSerialized] public IInteractable PickedObj;
 
-    private IPickable pickable;
-    private bool _ismyhandfull;
-
-    public void SetObjectToPick(IPickable obj)
+    private void Awake()
     {
-        if (pickable == null) pickable = obj;
+        Instance = this;
     }
 
-    public void ClearMe(IPickable obj)
+    private List<IInteractable> Interactables = new List<IInteractable>();
+
+    public void SetObjectToInteract(IInteractable obj)
     {
-        if (pickable == obj) pickable = null;
+        if (!Interactables.Contains(obj)) Interactables.Add(obj);
     }
 
-    public void Pick()
+    public void ClearMe(IInteractable obj)
     {
-        if (pickable != null)
-        {
-            if (_ismyhandfull)
-            {
-                _ismyhandfull = false;
-                pickable.OnPickDown();
-            }
-            else
-            {
-                _ismyhandfull = true;
-                pickable.OnPickUP(PickUPLocation);
-            }
-        }
+        Interactables.Remove(obj);
+    }
+
+    public void Interact()
+    {
+       if (Interactables.Count > 0) Interactables[Interactables.Count - 1 ]?.OnInteract();
     }
 }

@@ -92,7 +92,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GetComponent<InteractionManager>().Pick();
+            GetComponent<InteractionManager>().Interact();
         }
 
 
