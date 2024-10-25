@@ -90,6 +90,12 @@ public class CharacterMovement : MonoBehaviour
             _Sprint = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            GetComponent<InteractionManager>().Pick();
+        }
+
+
         _movmentAxis.x = Input.GetAxis("Horizontal");
         _movmentAxis.y = Input.GetAxis("Vertical");
 
