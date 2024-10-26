@@ -87,7 +87,7 @@ public class PickHandler : MonoBehaviour, IInteractable
             {
                 InteractionManager.Instance.PickedObj = null;
             }
-            Debug.Log(name);
+            //Debug.Log(name);
         }
     }
 }
