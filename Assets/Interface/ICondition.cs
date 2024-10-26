@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDoorCondition 
+public interface ICondition
 {
-    bool DoorCondition {get;}
+    bool Condition {get;}
 }

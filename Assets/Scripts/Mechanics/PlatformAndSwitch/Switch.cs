@@ -2,23 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class Switch : MonoBehaviour,IInteractable
 {
-    public List<ICondition> Conditions = new List<ICondition>();
+    [SerializeField] private Platform platform;
 
     void IInteractable.OnInteract()
     {
-        bool DoorShouldOpen = true;
-
-        foreach (ICondition condition in Conditions)
-        {
-            if (!condition.Condition) { DoorShouldOpen = false; break; }
-        }
-
-        if (DoorShouldOpen)
-        {
-            GetComponent<Animator>().Play("DoorOpen");
-        }
+        platform.IsPlayerOnboard = !platform.IsPlayerOnboard;
+        GetComponent<Animator>().speed = platform.IsPlayerOnboard ? 1 : - 1;
+        GetComponent<Animator>().Play("SwitchOn");
     }
 
     private void OnTriggerEnter(Collider other)

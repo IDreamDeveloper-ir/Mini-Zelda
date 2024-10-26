@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour, IDoorCondition
+public class PressurePlate : MonoBehaviour, ICondition
 {
     [SerializeField] private Door Door;
 
     private void Awake()
     {
-        Door.DoorConditions.Add(this);
+        Door.Conditions.Add(this);
     }
 
-    bool IDoorCondition.DoorCondition => DoorCondition;
-    private bool DoorCondition;
+    bool ICondition.Condition => Condition;
+    private bool Condition;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PickHandler>())
         {
-            DoorCondition = true;
+            Condition = true;
             GetComponent<Animator>().Play("Activate");
             //((IInteractable)Door).OnInteract();
         }
@@ -28,7 +28,7 @@ public class PressurePlate : MonoBehaviour, IDoorCondition
     {
         if (other.GetComponent<PickHandler>())
         {
-            DoorCondition = false;
+            Condition = false;
             GetComponent<Animator>().Play("Deactivate");
         }
     }
