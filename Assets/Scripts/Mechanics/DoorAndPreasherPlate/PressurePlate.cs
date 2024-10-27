@@ -20,7 +20,7 @@ public class PressurePlate : MonoBehaviour, ICondition
         {
             Condition = true;
             GetComponent<Animator>().Play("Activate");
-            //((IInteractable)Door).OnInteract();
+            ((IInteractable)Door).OnInteract();
         }
     }
 
