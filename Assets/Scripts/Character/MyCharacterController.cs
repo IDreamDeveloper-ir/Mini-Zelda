@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class MyCharacterController : MonoBehaviour
 {
+    public static MyCharacterController Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
+    }
+
     private const string animParamiterMovement = "IsWalk";
     private const string animParamiterSprint = "Sprint";
     private const string animParamiterJump = "Jump";
@@ -12,6 +27,7 @@ public class MyCharacterController : MonoBehaviour
     [SerializeField][Range(0, 10)] private float playerWalkSpeed;
     [SerializeField][Range(0, 10)] private float playerSprintSpeed;
     [SerializeField][Range(0, 10)] private float playerJump;
+    [SerializeField] private LayerMask GroundLayerMask;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
@@ -20,6 +36,7 @@ public class MyCharacterController : MonoBehaviour
     private Dictionary<Vector2, float> CharacterRotationList;
     private float _characterRotation;
     private bool _Sprint;
+    private bool _OnGround;
 
 
     // Start is called before the first frame update
@@ -64,21 +81,30 @@ public class MyCharacterController : MonoBehaviour
 
     }
 
-    public void OnJump()
+    private void LateUpdate()
     {
-        _rigidbody.velocity += (Vector3.up * playerJump);
-        _animator.SetTrigger(animParamiterJump);
+        _OnGround = Physics.Raycast(transform.position, Vector3.down, .5f, GroundLayerMask);
     }
 
-    public void OnSprint()
+    public void OnJump()
     {
-        _Sprint = !_Sprint;
+        if (_OnGround)
+        {
+            _rigidbody.velocity += (Vector3.up * playerJump);
+            _animator.SetTrigger(animParamiterJump);
+        } 
+    }
+
+    public void OnSprint(bool b)
+    {
+        _Sprint = b;
     }
 
     public void OnMove(Vector2 axis)
     {
         _movmentAxis = Vector2.zero;
-        _movmentAxis = axis.normalized;
+        _movmentAxis = LowCutterNormalized(axis);
+        //Debug.Log(_characterRotation);    
 
         movement(_movmentAxis);
     }
@@ -88,10 +114,17 @@ public class MyCharacterController : MonoBehaviour
         GetComponent<InteractionManager>().Interact();
     }
 
+    private Vector2 LowCutterNormalized(Vector2 direction)
+    {
+        direction.x = (Mathf.Abs(direction.x) > .6f ? direction.x : 0);
+        direction.y = (Mathf.Abs(direction.y) > .6f ? direction.y : 0);
+        return direction;
+    }
+
     private Vector2 AdvancedNormalized(Vector2 direction)
     {
-        direction.x = Mathf.Sign(direction.x) * (direction.x != 0 ? 1 : 0);
-        direction.y = Mathf.Sign(direction.y) * (direction.y != 0 ? 1 : 0);
+        direction.x = Mathf.Sign(direction.x) * (Mathf.Abs(direction.x) > .5f ? 1 : 0);
+        direction.y = Mathf.Sign(direction.y) * (Mathf.Abs(direction.y) > .5f ? 1 : 0);
         return direction;
     }
 }

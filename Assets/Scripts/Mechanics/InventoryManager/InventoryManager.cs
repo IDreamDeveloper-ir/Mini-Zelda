@@ -49,7 +49,7 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGameObject = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGameObject.GetComponent<InventoryItem>();  
         inventoryItem.initialiseItem(item);
-        UIController.Instance.UpdateUI();
+        UIController.Instance.UpdateCharacterUI();
     }
 
     public bool SearchForItem(Item item)
@@ -84,14 +84,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        UIController.Instance.UpdateUI();
+        UIController.Instance.UpdateCharacterUI();
         //Debug.Log("hhh");
     }
 
     public void AddCoin()
     {
         Coins++;
-        UIController.Instance.UpdateUI();
+        UIController.Instance.UpdateCharacterUI();
     }
 
     public int GetCoins()

@@ -21,15 +21,22 @@ public class InteractionManager : MonoBehaviour
     public void SetObjectToInteract(IInteractable obj)
     {
         if (!Interactables.Contains(obj)) Interactables.Add(obj);
+        UIController.Instance.UpdateInputUI();
     }
 
     public void ClearMe(IInteractable obj)
     {
         Interactables.Remove(obj);
+        UIController.Instance.UpdateInputUI();
     }
 
     public void Interact()
     {
        if (Interactables.Count > 0) Interactables[Interactables.Count - 1 ]?.OnInteract();
+    }
+
+    public int CurrentAvailableInteract()
+    {
+        return Interactables.Count;
     }
 }

@@ -21,6 +21,7 @@ public class UIController : MonoBehaviour
 
     [Header("Presenters")]
     [SerializeField] private CharacterPresenter characterPresenter;
+    [SerializeField] private InputPresenter inputPresenter;
 
     private GameObject _prePage;
 
@@ -81,8 +82,13 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
 
-    public void UpdateUI()
+    public void UpdateCharacterUI()
     {
         characterPresenter.UpdateCounterUI();
+    }
+
+    public void UpdateInputUI()
+    {
+        inputPresenter.UpdateInteractButton();
     }
 }
