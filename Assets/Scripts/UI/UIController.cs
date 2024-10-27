@@ -5,8 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
+    public static UIController Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
+    [Header("UI Elements")]
     [SerializeField] private GameObject[] UiPages;
     [SerializeField] private GameObject mainMenu, in_Game, pauseMenu, gameOverScreen, settingScreen;
+
+    [Header("Presenters")]
+    [SerializeField] private CharacterPresenter characterPresenter;
 
     private GameObject _prePage;
 
@@ -65,5 +79,10 @@ public class UIController : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void UpdateUI()
+    {
+        characterPresenter.UpdateCounterUI();
     }
 }

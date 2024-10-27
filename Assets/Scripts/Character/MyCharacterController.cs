@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
+public class MyCharacterController : MonoBehaviour
 {
     private const string animParamiterMovement = "IsWalk";
     private const string animParamiterSprint = "Sprint";
@@ -12,16 +12,14 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField][Range(0, 10)] private float playerWalkSpeed;
     [SerializeField][Range(0, 10)] private float playerSprintSpeed;
     [SerializeField][Range(0, 10)] private float playerJump;
-    [SerializeField] private LayerMask GroundLayerMask;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
     private Vector2 _movmentAxis;
-    private bool _OnGround;
-    private bool _Sprint;
 
     private Dictionary<Vector2, float> CharacterRotationList;
     private float _characterRotation;
+    private bool _Sprint;
 
 
     // Start is called before the first frame update
@@ -46,7 +44,7 @@ public class CharacterMovement : MonoBehaviour
     private void movement(Vector2 direction)
     {
         _rigidbody.velocity = ((Vector3.right * direction.x)
-            + (Vector3.forward * direction.y)) 
+            + (Vector3.forward * direction.y))
             * (_Sprint ? playerSprintSpeed : playerWalkSpeed)
             + (Vector3.up * _rigidbody.velocity.y);
 
@@ -66,44 +64,28 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
-    private void Jump()
+    public void OnJump()
     {
         _rigidbody.velocity += (Vector3.up * playerJump);
         _animator.SetTrigger(animParamiterJump);
     }
 
-    private void Update()
+    public void OnSprint()
+    {
+        _Sprint = !_Sprint;
+    }
+
+    public void OnMove(Vector2 axis)
     {
         _movmentAxis = Vector2.zero;
-        _OnGround = Physics.Raycast(transform.position, Vector3.down,.5f,GroundLayerMask);
-
-        if (Input.GetKeyDown(KeyCode.Space) && _OnGround)
-        {
-            Jump();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _Sprint = true;
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            _Sprint = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GetComponent<InteractionManager>().Interact();
-        }
-
-
-        _movmentAxis.x = Input.GetAxis("Horizontal");
-        _movmentAxis.y = Input.GetAxis("Vertical");
-
-        _movmentAxis = _movmentAxis.normalized;
+        _movmentAxis = axis.normalized;
 
         movement(_movmentAxis);
+    }
+
+    public void OnInteract()
+    {
+        GetComponent<InteractionManager>().Interact();
     }
 
     private Vector2 AdvancedNormalized(Vector2 direction)

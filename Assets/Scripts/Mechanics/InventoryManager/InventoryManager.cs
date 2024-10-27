@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -25,6 +27,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventorySlot[] inventorySlots;
     [SerializeField] private GameObject inventoryItemPrefab;
 
+    private int Coins;
+
     public bool AddItem(Item item)
     {
         foreach (InventorySlot slot in inventorySlots)
@@ -45,6 +49,7 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGameObject = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGameObject.GetComponent<InventoryItem>();  
         inventoryItem.initialiseItem(item);
+        UIController.Instance.UpdateUI();
     }
 
     public bool SearchForItem(Item item)
@@ -73,10 +78,45 @@ public class InventoryManager : MonoBehaviour
             {
                 if (itemInSlot.Item == item)
                 {
-                    Destroy(itemInSlot.gameObject);
-                    return;
+                    DestroyImmediate(itemInSlot.gameObject);
+                    break;
                 }
             }
         }
+
+        UIController.Instance.UpdateUI();
+        //Debug.Log("hhh");
+    }
+
+    public void AddCoin()
+    {
+        Coins++;
+        UIController.Instance.UpdateUI();
+    }
+
+    public int GetCoins()
+    {
+        return Coins;
+    }
+
+    public int GetKeys()
+    {
+        int keyCount = 0;
+
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null)
+            {
+                if (itemInSlot.Item.Type == Item.ItemType.SmallKey 
+                    || itemInSlot.Item.Type == Item.ItemType.BigKey)
+                {
+                    keyCount++;
+                    //Debug.Log("GGG");
+                }
+            }
+        }
+
+        return keyCount;
     }
 }

@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterPresenter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    [SerializeField] private TextMeshProUGUI CoinCounter;
+    [SerializeField] private TextMeshProUGUI KeyCounter;
+    [SerializeField] private Slider HealthSlider;
+
+    public void UpdateCounterUI()
     {
-        
+        CoinCounter.text = InventoryManager.Instance.GetCoins().ToString();
+        KeyCounter.text = InventoryManager.Instance.GetKeys().ToString();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateHealthUI(float currentHealth)
     {
-        
+        HealthSlider.value = currentHealth;
     }
 }
